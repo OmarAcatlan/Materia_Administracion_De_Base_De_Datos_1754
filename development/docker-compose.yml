@@ -13,27 +13,9 @@ services:
       - ./backups/completo:/var/lib/postgresql/backups/completo
       - ./backups/diferencial:/var/lib/postgresql/backups/diferencial
       - ./backups/incremental/wal:/var/lib/postgresql/backups/incremental/wal
-      - ./airflow/script:/docker-entrypoint-initdb.d
+      - ./init-db:/docker-entrypoint-initdb.d
       
     restart: always
-    networks:
-      - fes-acatlan
-
-  pgloader:
-    image: dimitri/pgloader
-    platform: linux/amd64
-    depends_on:
-      - postgres
-    volumes:
-      - ./data:/data
-    entrypoint:
-      - bash
-      - -c
-      - |
-        echo "Esperando 20 segundos a que Postgres arranque..."
-        sleep 20
-        echo "Ejecutando pgloader."
-        pgloader /data/creacion.load
     networks:
       - fes-acatlan
 
